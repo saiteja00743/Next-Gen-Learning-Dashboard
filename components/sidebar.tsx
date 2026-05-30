@@ -1,0 +1,190 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  LayoutDashboard,
+  BookOpen,
+  BarChart2,
+  Calendar,
+  Settings,
+  ChevronLeft,
+  ChevronRight,
+  Zap,
+} from "lucide-react";
+
+const navItems = [
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/dashboard/courses", label: "Courses", icon: BookOpen },
+  { href: "/dashboard/analytics", label: "Analytics", icon: BarChart2 },
+  { href: "/dashboard/calendar", label: "Calendar", icon: Calendar },
+  { href: "/dashboard/settings", label: "Settings", icon: Settings },
+];
+
+export default function Sidebar() {
+  const [collapsed, setCollapsed] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Automatically collapse on tablet width (768px - 1024px)
+      if (window.innerWidth >= 768 && window.innerWidth <= 1024) {
+        setCollapsed(true);
+      } else if (window.innerWidth > 1024) {
+        setCollapsed(false);
+      }
+    };
+
+    // Initialize on mount
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return (
+    <motion.aside
+      animate={{ width: collapsed ? 76 : 260 }}
+      transition={{ type: "spring", stiffness: 280, damping: 28 }}
+      className="hidden md:flex flex-col shrink-0 h-full relative"
+      style={{
+        background: "rgba(3, 3, 3, 0.6)",
+        borderRight: "1px solid rgba(255, 255, 255, 0.05)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+      }}
+    >
+      {/* Top Logo and Header */}
+      <div
+        className="flex items-center gap-3 px-5 py-6 overflow-hidden"
+        style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.04)" }}
+      >
+        <div
+          className="flex items-center justify-center shrink-0 rounded-xl"
+          style={{
+            width: 40,
+            height: 40,
+            background: "linear-gradient(135deg, #8b5cf6, #6366f1)",
+            boxShadow: "0 0 15px rgba(139, 92, 246, 0.4)",
+          }}
+        >
+          <Zap size={20} className="text-white fill-white/10" />
+        </div>
+        <AnimatePresence>
+          {!collapsed && (
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden whitespace-nowrap"
+            >
+              <h2 className="font-bold text-base tracking-tight text-white">
+                LearnFlow
+              </h2>
+              <p className="text-[10px] uppercase font-bold tracking-wider text-neutral-500 mt-0.5">
+                Student Hub
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Navigation Menu */}
+      <nav className="flex-1 px-4 py-6 overflow-y-auto">
+        <ul className="space-y-2 list-none">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
+
+            return (
+              <li key={item.href}>
+                <Link href={item.href} id={`nav-${item.label.toLowerCase()}`}>
+                  <div
+                    className="relative flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer group transition-colors duration-200"
+                    style={{ color: isActive ? "#ffffff" : "#94a3b8" }}
+                  >
+                    {/* Snap Active Indicator */}
+                    {isActive && (
+                      <motion.div
+                        layoutId="active-tab"
+                        className="absolute inset-0 rounded-xl"
+                        style={{
+                          background: "linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(99, 102, 241, 0.05))",
+                          border: "1px solid rgba(139, 92, 246, 0.2)",
+                        }}
+                        transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                      />
+                    )}
+
+                    {/* Hover Glow */}
+                    {!isActive && (
+                      <div
+                        className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                        style={{ background: "rgba(255, 255, 255, 0.025)", border: "1px solid rgba(255, 255, 255, 0.04)" }}
+                      />
+                    )}
+
+                    {/* Left Accent indicator line */}
+                    {isActive && (
+                      <motion.div
+                        layoutId="active-indicator"
+                        className="absolute left-0 top-3 bottom-3 w-1 rounded-r bg-violet-500 shadow-[0_0_8px_rgba(139,92,246,0.6)]"
+                        transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                      />
+                    )}
+
+                    <div className="relative z-10 shrink-0">
+                      <Icon
+                        size={18}
+                        style={{
+                          color: isActive ? "#a78bfa" : "inherit",
+                          filter: isActive ? "drop-shadow(0 0 8px rgba(139, 92, 246, 0.5))" : "none",
+                        }}
+                      />
+                    </div>
+
+                    <AnimatePresence>
+                      {!collapsed && (
+                        <motion.span
+                          initial={{ opacity: 0, x: -8 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -8 }}
+                          transition={{ duration: 0.18 }}
+                          className="relative z-10 text-sm font-semibold whitespace-nowrap overflow-hidden"
+                        >
+                          {item.label}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+
+      {/* Collapse Action Button */}
+      <div className="p-4" style={{ borderTop: "1px solid rgba(255, 255, 255, 0.04)" }}>
+        <button
+          id="sidebar-collapse-toggle"
+          onClick={() => setCollapsed((c) => !c)}
+          className="w-full flex items-center justify-center rounded-xl py-3 border border-white/5 bg-white/[0.01] hover:bg-white/[0.04] text-neutral-400 hover:text-white transition-all duration-200 cursor-pointer"
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {collapsed ? (
+            <ChevronRight size={16} />
+          ) : (
+            <span className="flex items-center gap-2 text-xs font-bold tracking-wide uppercase">
+              <ChevronLeft size={16} />
+              Collapse View
+            </span>
+          )}
+        </button>
+      </div>
+    </motion.aside>
+  );
+}
