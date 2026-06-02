@@ -81,7 +81,7 @@ export default async function ComingSoonPage({ params }: ComingSoonProps) {
           {title} Hub
         </h2>
         <p className="text-sm text-neutral-400 mt-3 leading-relaxed">
-          The <span className="font-semibold text-neutral-200">{title}</span> section is currently under development. Antigravity is crafting this screen to follow the design tokens of LearnFlow.
+          The <span className="font-semibold text-neutral-200">{title}</span> section is currently under development and will be available soon.
         </p>
 
         {/* Progress track representation (Static premium visual) */}

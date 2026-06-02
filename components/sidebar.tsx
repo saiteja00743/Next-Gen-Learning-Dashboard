@@ -27,22 +27,7 @@ export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
 
-  useEffect(() => {
-    const handleResize = () => {
-      // Automatically collapse on tablet width (768px - 1024px)
-      if (window.innerWidth >= 768 && window.innerWidth <= 1024) {
-        setCollapsed(true);
-      } else if (window.innerWidth > 1024) {
-        setCollapsed(false);
-      }
-    };
 
-    // Initialize on mount
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
     <motion.aside
