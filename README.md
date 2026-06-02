@@ -117,4 +117,7 @@ To maximize performance, security, and SEO, we strategically divided the applica
 ### 3. Challenges & Technical Solutions
 * **CSS Variable Opacity Interpolation**: When building dynamic stat card themes, CSS-variables do not support standard hex-opacity appending (e.g., `var(--color)20` is invalid). Resolved by passing strict hex-token variables and interpolating with hex-opacity suffixes.
 * **Next.js 15 Async Params**: Handled the new Next.js 15 routing requirement where dynamic route parameters must be asynchronously resolved (`await params`) inside catch-all views.
+* **Sidebar Transition Refinement**: To achieve organic fluid animations during sidebar expand/collapse transitions, customized Framer Motion's `spring` properties (`stiffness: 220, damping: 26`). Staggered the text fading transitions using `AnimatePresence` to prevent wrapping text jumps.
+* **Database Fallback Handler**: Created dynamic fallback mechanisms in RSC fetches. If the remote Supabase database contains no rows (or is locked via RLS policies), the application gracefully falls back to mock data structures, ensuring zero dashboard downtime.
+
 

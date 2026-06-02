@@ -1,5 +1,6 @@
 import Sidebar from "@/components/sidebar";
 import MobileNav from "@/components/mobile-nav";
+import Link from "next/link";
 
 export default function DashboardLayout({
   children,
@@ -36,12 +37,14 @@ export default function DashboardLayout({
               </span>
               <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Active Session</span>
             </div>
-            <div
-              className="w-8 h-8 rounded-xl flex items-center justify-center text-sm font-black text-white"
+            <Link
+              href="/dashboard/profile"
+              id="header-profile-avatar"
+              className="w-8 h-8 rounded-xl flex items-center justify-center text-sm font-black text-white cursor-pointer hover:scale-105 active:scale-95 transition-all duration-200"
               style={{ background: "linear-gradient(135deg, #8b5cf6, #6366f1)", boxShadow: "0 0 12px rgba(139,92,246,0.3)" }}
             >
               S
-            </div>
+            </Link>
           </div>
         </header>
 

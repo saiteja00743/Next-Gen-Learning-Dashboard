@@ -47,7 +47,7 @@ export default function Sidebar() {
   return (
     <motion.aside
       animate={{ width: collapsed ? 76 : 260 }}
-      transition={{ type: "spring", stiffness: 280, damping: 28 }}
+      transition={{ type: "spring", stiffness: 220, damping: 26 }}
       className="hidden md:flex flex-col shrink-0 h-full relative"
       style={{
         background: "rgba(3, 3, 3, 0.6)",
@@ -61,17 +61,22 @@ export default function Sidebar() {
         className="flex items-center gap-3 px-5 py-6 overflow-hidden"
         style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.04)" }}
       >
-        <div
-          className="flex items-center justify-center shrink-0 rounded-xl"
+        <button
+          id="sidebar-collapse-toggle"
+          onClick={() => setCollapsed((c) => !c)}
+          className="flex items-center justify-center shrink-0 rounded-xl cursor-pointer hover:scale-105 active:scale-95 transition-all duration-200 hover:shadow-[0_0_20px_rgba(139,92,246,0.6)]"
           style={{
             width: 40,
             height: 40,
             background: "linear-gradient(135deg, #8b5cf6, #6366f1)",
             boxShadow: "0 0 15px rgba(139, 92, 246, 0.4)",
+            border: "none",
+            outline: "none",
           }}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           <Zap size={20} className="text-white fill-white/10" />
-        </div>
+        </button>
         <AnimatePresence>
           {!collapsed && (
             <motion.div
@@ -167,24 +172,6 @@ export default function Sidebar() {
         </ul>
       </nav>
 
-      {/* Collapse Action Button */}
-      <div className="p-4" style={{ borderTop: "1px solid rgba(255, 255, 255, 0.04)" }}>
-        <button
-          id="sidebar-collapse-toggle"
-          onClick={() => setCollapsed((c) => !c)}
-          className="w-full flex items-center justify-center rounded-xl py-3 border border-white/5 bg-white/[0.01] hover:bg-white/[0.04] text-neutral-400 hover:text-white transition-all duration-200 cursor-pointer"
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          {collapsed ? (
-            <ChevronRight size={16} />
-          ) : (
-            <span className="flex items-center gap-2 text-xs font-bold tracking-wide uppercase">
-              <ChevronLeft size={16} />
-              Collapse View
-            </span>
-          )}
-        </button>
-      </div>
     </motion.aside>
   );
 }
